@@ -1,34 +1,29 @@
 package com.meritamerica.assignment3;
-
-import com.meritamerica.assignment3.BankAccount;
-
-import java.text.DateFormat;
+import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class SavingsAccount extends BankAccount {
-
-	// ***************** SAVING ACCOUNT CONSTRUCTOR *****************
 	
-	private static final double INTEREST_RATE = 0.01; 
+		public SavingsAccount(double balance) {
+			super(balance, balance);
+		}	
+		public SavingsAccount(long accountNumber, double balance, double interestRate, Date simpleDataFormat) {
+			super(accountNumber, balance, interestRate, simpleDataFormat);
+		}
 	
-	public SavingsAccount(double openingBalance) {	
-		super(openingBalance, INTEREST_RATE);
+		
+	static SavingsAccount readFromString(String accountData) throws ParseException {
+		String[]chd = accountData.split(",");
+		
+		long accountNumber = Long.parseLong(chd[0]);
+		double balance = Double.parseDouble(chd[1]);
+		double interestRate = Double.parseDouble(chd[2]);
+		Date simpleDataFormat = Date.valueOf(chd[3]);
+		
+		SavingsAccount SavingsAccountInfo = new SavingsAccount(accountNumber, balance,
+				interestRate,simpleDataFormat);
+		
+		return SavingsAccountInfo;
 		
 	}
-
-	public SavingsAccount(long accountNumber, double balance, double interestRate, Date accountOpenedOn) {
-		super(accountNumber, balance, interestRate, accountOpenedOn);
-	}
-
-	public static SavingsAccount readFromString(String savingAccount) throws ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String[] savingAccountInfo = savingAccount.split(",");
-		SavingsAccount savingsAccount = new SavingsAccount(Long.getLong(savingAccountInfo[0]),
-				Double.valueOf(savingAccountInfo[1]), Double.valueOf(savingAccountInfo[2]),
-				dateFormat.parse(savingAccountInfo[3]));
-		
-		return savingsAccount;
-	}
-}
+}	

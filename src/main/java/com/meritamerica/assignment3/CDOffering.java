@@ -1,31 +1,49 @@
 package com.meritamerica.assignment3;
+
 public class CDOffering {
-	private int term;
-	private double interestRate;
-	//1. CDOferring (int term, double interestRate)
-	// behulum and allana
-	public CDOffering(int term, double interestRate) {
+
+	int term;
+	double interestRate;
+	
+
+// CONSTRUCTOR
+
+	public CDOffering (int term, double interestRate) {
 		this.term = term;
 		this.interestRate = interestRate;
 	}
-	//2. int getTerm ()
+		
+	
 	public int getTerm() {
-		return this.term;
+		return term;
 	}
-	//3. double getInterestRate ()
+	
 	public double getInterestRate() {
-		return this.interestRate;
+		return interestRate;
 	}
-	public String writeToString(){
-		return term+","+interestRate;
+	
+	public String toString() {
+		return "Your CD Offering Terms: " + this.getTerm() + " Your CD Offering Interest Rate: " + this.getInterestRate();
 	}
-	public static CDOffering readFromString(String cdOfferingInfo) {
-		String[] cdInfo =  cdOfferingInfo.split(",");
-		CDOffering cDOffering = new CDOffering(Integer.getInteger(cdInfo[0]), Double.valueOf(cdInfo[1]));
-		return cDOffering;
+		
+// AMENDMENTS 
+	
+	static CDOffering readFromString(String cdOfferingDataString) {
+		
+		String storage1[] = cdOfferingDataString.split(",");
+		int testTerm = Integer.parseInt(storage1[0]);
+		double testInterest = Double.parseDouble(storage1[1]);
+		
+		CDOffering offeringA = new CDOffering(testTerm, testInterest);
+		return offeringA;
 	}
+	
+	
+	public String writeToString() {
+		return this.term + "," + this.interestRate;
+	}
+	
 }
-
 
 
 
