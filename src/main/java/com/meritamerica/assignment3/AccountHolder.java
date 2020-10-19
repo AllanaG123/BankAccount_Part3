@@ -1,311 +1,282 @@
-/* Week 3 Partner Pair Assignment #2
- * Bank Account Part 2  
- * @author Michelle Neptune
- * @date October 10, 2020
- * PART 2
- */
-
-//==========================================================================================================================
-//======================================================= IMPORTS ==========================================================
-//==========================================================================================================================	
-
 package com.meritamerica.assignment3;
-
-import java.util.Arrays;
-
-//==========================================================================================================================
-//====================================================== VARIABLES =========================================================
-//==========================================================================================================================	
-	
-	public class AccountHolder {
-	
-		private String firstName;
-		private String middleName;
-		private String lastName;
-		private String ssn;
-		CheckingAccount[] checkingStorage = new CheckingAccount[0];
-		SavingsAccount[] savingsStorage = new SavingsAccount[0];
-		CDAccount [] cdAccountStorage = new CDAccount[0];
-		private double totalBalance;
-
-//==========================================================================================================================
-//======================================== CONSTRUCTOR - ACCOUNT HOLDER DETAILS ============================================
-//==========================================================================================================================	
-	
-	public AccountHolder(String firstName, String middleName, String lastName, String ssn) {
-		
-		this.firstName = firstName;
-		this.middleName = middleName; 
-		this.lastName = lastName; 
-		this.ssn = ssn;
-	} 
-	
-//==========================================================================================================================
-//==================================================== GET & SET METHODS ===================================================
-//==========================================================================================================================
-	
-// ===== FIRST NAME ===== 
+import com.meritamerica.assignment3.CDAccount;
+import com.meritamerica.assignment3.CDOffering;
+import com.meritamerica.assignment3.CheckingAccount;
+import com.meritamerica.assignment3.SavingsAccount;
+import java.text.ParseException;
+public class AccountHolder implements Comparable<AccountHolder> {
+	private String myFirstName;
+	private String myMiddleName;
+	private String myLastName;
+	private String mySsn;
+	private CheckingAccount[] checkingAccountList;
+	private SavingsAccount[] savingsAccountList;
+	private CDAccount[] cdAccountList;
+	private final double CHECKING_ACCOUNT_INTEREST_RATE = 0.0001;
+	private final double SAVINGS_ACCOUNT_INTEREST_RATE = 0.01;
+	private final double COMBINED_BALANCE_LIMIT = 250000;
+	//1. AccountHolder(String firstName, String middleName, String lastName, String ssn)
+	public AccountHolder(String myFirstName, String myMiddleName, String myLastName, String mySsn) {
+		this.myFirstName = myFirstName;
+		this.myMiddleName = myMiddleName;
+		this.myLastName = myLastName;
+		this.mySsn = mySsn;
+		this.checkingAccountList = null;
+		this.savingsAccountList = null;
+	}
+	//2.Sting getFirstName()
+	//*behulum  and allana
 
 	public String getFirstName() {
-		return firstName;
+		return myFirstName;
 	}
-	
+	//3.void setFirstName()
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		myFirstName = firstName;
 	}
-
-// ===== MIDDLE NAME ===== 
-
+	//4.String getMiddleName()
 	public String getMiddleName() {
-		return middleName;
+		return myMiddleName;
 	}
-		
+	//5.void setMiddleName()
 	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
+		myMiddleName = middleName;
 	}
-
-// ===== LAST NAME ===== 
-
+	//6.String getLastName()
 	public String getLastName() {
-		return lastName;
+		return myLastName;
 	}
-		
+	//7.void setLastName()
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		myLastName = lastName;
 	}
-
-// ===== SSN ===== 
-
+	//8.String getSSN()
 	public String getSSN() {
-		return ssn;
+		return mySsn;
 	}
-		
+	//9.void setSSN()
 	public void setSSN(String ssn) {
-		this.ssn = ssn;
+		mySsn = ssn;
 	}
-
-//==========================================================================================================================
-// ================================================ CHECKING ACCOUNT METHODS ===============================================
-//==========================================================================================================================
-	
-//******************************** PART 1 OF CHECKING - Opening Balance to Checking Account ******************************** 
-	
-//TOP OF METHOD: checks to see if combined balances are less than 250,000	
-//BOTTOM OF METHOD: ONLY Opening Balance of the checking Account is added to the Account Holder - Adding items to an Array
-	
-	public void addCheckingAccount(double openingBalance) {
-		
-		totalBalance = getCheckingBalance() + getSavingsBalance() + openingBalance;
-		
-		System.out.println("Checking Total Balance:" + totalBalance);
-		
-		if(totalBalance > 250000) {
-			System.out.println("WARNING! A new Checking account can not be opened until the combined balances of your current accounts are below $250,000.");
-		return;
-		
-	}
-		
-		CheckingAccount newX = new CheckingAccount(openingBalance);
-		CheckingAccount[] newCheckingStorage = new CheckingAccount[checkingStorage.length+1];
-			for(int i = 0; i < newCheckingStorage.length-1; i++) {
-				newCheckingStorage[i] = checkingStorage[i];
-			}
-			checkingStorage = newCheckingStorage;
-			checkingStorage[checkingStorage.length-1] = newX;
-	}
-	
-// ***************************** PART 2 OF CHECKING - Adding Amount (not opening balance) to Checking Account *************** 
-	
-//TOP OF METHOD: checks to see if combined balances are less than 250,000	
-//BOTTOM OF METHOD: ONLY Opening Balance of the checking Account is added to the Account Holder - Adding items to an Array
-		
-		public void addCheckingAccount(CheckingAccount checkingAccount) {
-			
-			totalBalance = checkingAccount.getBalance() + getCheckingBalance() + getSavingsBalance();
-			
-			System.out.println("Checking Total Balance:" + totalBalance);
-			
-			
-			if(totalBalance > 250000) {
-				System.out.println("WARNING! A new Checking account can not be opened until the combined balances of your current accounts are below $250,000.");
-			return;
-		}
-		
-			CheckingAccount[] newCheckingStorage = new CheckingAccount[checkingStorage.length+1];
-			
-				for(int i = 0; i < newCheckingStorage.length-1; i++) {
-					newCheckingStorage[i] = checkingStorage[i];
+	// 10. CheckingAccount addCheckingAccount(double openingBalance)
+	public CheckingAccount addCheckingAccount(double openingBalance) {
+		if (getCheckingBalance() + getSavingsBalance() + openingBalance > COMBINED_BALANCE_LIMIT || openingBalance < 0) {
+			return null;
+		} else {
+			if (checkingAccountList == null) {
+				checkingAccountList = new CheckingAccount[1];
+				try {
+					checkingAccountList[0] = new CheckingAccount(openingBalance, CHECKING_ACCOUNT_INTEREST_RATE);
+				} catch (ParseException e) {
+					e.printStackTrace();
 				}
-				checkingStorage = newCheckingStorage;
-				checkingStorage[checkingStorage.length-1] = checkingAccount;
+			} else {
+				CheckingAccount[] tempCheckingAccount = new CheckingAccount[checkingAccountList.length + 1];
+				for (int i = 0; i < checkingAccountList.length; i++) {
+					tempCheckingAccount[i] = checkingAccountList[i];
+				}
+				try {
+					tempCheckingAccount[checkingAccountList.length] = new CheckingAccount(openingBalance, CHECKING_ACCOUNT_INTEREST_RATE);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				checkingAccountList = tempCheckingAccount;
+			}
+			return checkingAccountList[checkingAccountList.length -1];
 		}
-	
-// ************************************* PART 3 OF CHECKING: Returns the Checking Account *************************************  	
-	
+	}
+	// 11. CheckingAccount addCheckingAccount(CheckingAccount checkingAccount)
+	// behulum and allana
+	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) {
+		if (getCheckingBalance() + getSavingsBalance() + checkingAccount.getBalance() > COMBINED_BALANCE_LIMIT) {
+			return null;
+		} else {
+			if (checkingAccountList == null) {
+				checkingAccountList = new CheckingAccount[1];
+				checkingAccountList[0] = checkingAccount;
+			} else {
+				CheckingAccount[] tempCheckingAccount = new CheckingAccount[checkingAccountList.length + 1];
+				for (int i = 0; i < checkingAccountList.length; i++) {
+					tempCheckingAccount[i] = checkingAccountList[i];
+				}
+				tempCheckingAccount[checkingAccountList.length] = checkingAccount;
+				checkingAccountList = tempCheckingAccount;
+			}
+			return checkingAccountList[checkingAccountList.length -1];
+		}
+	}
+	//12. CheckingAccount[] getCheckingAccounts()
 	public CheckingAccount[] getCheckingAccounts() {
-		//System.out.println("TESTING - CHECKING ACCOUNT IS" + checkingStorage);
-		return checkingStorage;
+		return checkingAccountList;
 	}
-	
-// *************************** PART 4 OF CHECKING: Will return the total number of Checking Accounts ************************** 	
-	
+	//13. int getNumberOfCheckingAccounts()
 	public int getNumberOfCheckingAccounts() {
-		//System.out.println("TESTING - Total Number of CHECKING Accounts:" + checkingStorage.length);
-		return checkingStorage.length;
-	}
-	
-// **************************** PART 5 OF CHECKING: Add up the total balance of the checking accounts ************************* 	
-	
-	double getCheckingBalance() {
-		double totalBalance = 0;
-		for(int i = 0; i < checkingStorage.length; i++) {
-			totalBalance = totalBalance + checkingStorage[i].getBalance();
+		if (checkingAccountList == null) {
+			return 0;
 		}
-		//System.out.println("TESTING - TOTAL BALANCE OF CHECKING ACCOUNTS" + totalBalance);
+		else {
+			return checkingAccountList.length;
+		}
+	}
+	//14. double getCheckingBalance()
+	public double getCheckingBalance() {
+		double totalBalance = 0.0;
+		if (checkingAccountList != null) {
+			for (int i=0; i < checkingAccountList.length; i++) {
+				totalBalance += checkingAccountList[i].getBalance();
+			}
+		}
 		return totalBalance;
 	}
-
-//==========================================================================================================================
-// ================================================ SAVINGS ACCOUNT METHODS ================================================
-//==========================================================================================================================
-	
-//********************************** PART 1 OF SAVINGS - Opening Balance to Savings Account ******************************** 
-	
-//TOP OF METHOD: checks to see if combined balances are less than 250,000	
-//BOTTOM OF METHOD: ONLY Opening Balance of the savings Account is added to the Account Holder - Adding items to an Array
-	
-	public void addSavingsAccount(double openingBalance) {
-		
-		totalBalance = getCheckingBalance() + getSavingsBalance() + openingBalance;
-		
-		System.out.println("Savings Total Balance:" + totalBalance);
-		
-		if(totalBalance > 250000) {
-			System.out.println("WARNING! A new Savings account can not be opened until the combined balances of your current accounts are below $250,000.");
-		return;
-	}
-		
-		SavingsAccount newX = new SavingsAccount(openingBalance);
-		SavingsAccount[] newSavingsStorage = new SavingsAccount[savingsStorage.length+1];
-			for(int i = 0; i < newSavingsStorage.length-1; i++) {
-				newSavingsStorage[i] = savingsStorage[i];
-			}
-			savingsStorage = newSavingsStorage;
-			savingsStorage[savingsStorage.length-1] = newX;
-	}
-	
-// ***************************** PART 2 OF SAVINGS - Adding Amount (not opening balance) to Savings Account *************** 
-	
-//TOP OF METHOD: checks to see if combined balances are less than 250,000	
-//BOTTOM OF METHOD: ONLY Opening Balance of the savings Account is added to the Account Holder - Adding items to an Array
-			
-		public void addSavingsAccount(SavingsAccount savingsAccount) {
-			
-			System.out.println("SAVINGS ACCOUNT BALANCE:" + totalBalance);
-				
-			totalBalance = savingsAccount.getBalance() + getCheckingBalance() + getSavingsBalance();
-				
-			if(totalBalance > 250000) {
-				System.out.println("WARNING! A new Savings account can not be opened until the combined balances of your current accounts are below $250,000.");
-				return;
-			}
-			
-			SavingsAccount[] newSavingsStorage = new SavingsAccount[savingsStorage.length+1];
-				
-				for(int i = 0; i < newSavingsStorage.length-1; i++) {
-					newSavingsStorage[i] = savingsStorage[i];
+	//15. SavingsAccount addSavingsAccount(double openingBalance)
+	public SavingsAccount addSavingsAccount(double openingBalance) {
+		if (getCheckingBalance() + getSavingsBalance() + openingBalance > COMBINED_BALANCE_LIMIT || openingBalance < 0) {
+			return null;
+		} else {
+			if (savingsAccountList == null) {
+				savingsAccountList = new SavingsAccount[1];
+				try {
+					savingsAccountList[0] = new SavingsAccount(openingBalance, SAVINGS_ACCOUNT_INTEREST_RATE);
+				} catch (ParseException e) {
+					e.printStackTrace();
 				}
-				savingsStorage = newSavingsStorage;
-				savingsStorage[savingsStorage.length-1] = savingsAccount;
-		}	
-	
-// ************************************* PART 3 OF SAVINGS: Returns the Savings Account ***************************************  	
-	
-		public SavingsAccount[] getSavingsAccounts() {
-			//System.out.println("TESTING - SAVINGS ACCOUNT IS" + savingsStorage);
-			return savingsStorage;
-		}
-		
-// *************************** PART 4 OF SAVINGS: Will return the total number of savings Accounts *********************** 	
-		
-		public int getNumberOfSavingsAccounts() {
-			//System.out.println("TESTING - Total Number of Savings Accounts:" + savingsStorage.length);
-			return savingsStorage.length;
-		}
-		
-// ************************** PART 5 OF SAVINGS: Add up the total balance of the savings accounts ************************ 	
-		
-		double getSavingsBalance() {
-			double totalBalance = 0;
-			for(int i = 0; i < savingsStorage.length; i++) {
-				totalBalance = totalBalance + savingsStorage[i].getBalance();
+			} else {
+				SavingsAccount[] tempSavingsAccount = new SavingsAccount[savingsAccountList.length + 1];
+				for (int i = 0; i < savingsAccountList.length; i++) {
+					tempSavingsAccount[i] = savingsAccountList[i];
+				}
+				try {
+					tempSavingsAccount[savingsAccountList.length] = new SavingsAccount(openingBalance, SAVINGS_ACCOUNT_INTEREST_RATE);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				savingsAccountList = tempSavingsAccount;
 			}
-			//System.out.println("TESTING - TOTAL BALAANCE OF SAVINGS ACCOUNTS" + totalBalance);
-			return totalBalance;
+			return savingsAccountList[savingsAccountList.length - 1];
 		}
-	
-	
-//==========================================================================================================================
-// =================================================== CD ACCOUNT METHODS ==================================================
-//==========================================================================================================================
-	
-		
-		
-//*********************************************** PART 1 OF CD - CD Opening Balance  **************************************** 
-// ONLY Offering & Opening Balance - Adding items to an Array
-
-	
-	public CDAccount addCDAccount(CDOffering offering, double openingBalance) {
-		CDAccount newX = new CDAccount(offering, openingBalance);
-		CDAccount[] newCDStorage = new CDAccount[cdAccountStorage.length+1];
-		for (int i = 0; i < newCDStorage.length-1; i++) {
-			newCDStorage[i] = cdAccountStorage[i];
-		}
-		cdAccountStorage = newCDStorage;
-		return cdAccountStorage[cdAccountStorage.length-1] = newX;
-		
 	}
-	
-//************************************************** PART 2 OF CD ACCOUNT  ************************************************** 
-	
-	public CDAccount addCDAccount(CDAccount cdAccount) {
-		CDAccount[] newCDStorage = new CDAccount[cdAccountStorage.length+1];
-		for (int i =0; i < newCDStorage.length-1; i++) {
-			newCDStorage[i] = cdAccountStorage[i];
+	//16. SavingsAccount addSavingsAccount(SavingsAccount savingsAccount)
+	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) {
+		if (getCombinedBalance() + savingsAccount.getBalance() > COMBINED_BALANCE_LIMIT) {
+			return null;
+		} else {
+			if (savingsAccountList == null) {
+				savingsAccountList = new SavingsAccount[1];
+				savingsAccountList[0] = savingsAccount;
+			} else {
+				SavingsAccount[] tempSavingsAccount = new SavingsAccount[savingsAccountList.length +1];
+				for (int i = 0; i < savingsAccountList.length; i++) {
+					tempSavingsAccount[i] = savingsAccountList[i];
+				}
+				tempSavingsAccount[savingsAccountList.length] = savingsAccount;
+				savingsAccountList = tempSavingsAccount;
+			}
+			return savingsAccountList[savingsAccountList.length - 1];
 		}
-		cdAccountStorage = newCDStorage;
-		return cdAccountStorage[cdAccountStorage.length-1] = cdAccount;
-		
 	}
-
-//************************************************** PART 3 OF CD ACCOUNT  ************************************************** 
-	
+	//17. SavingsAccount[]getSavingsAccounts()
+	public SavingsAccount[] getSavingsAccounts(){
+		return savingsAccountList;
+	}
+	//18. int getNumberOfSavingsAccounts()
+	public int getNumberOfSavingsAccounts() {
+		if (savingsAccountList != null) {
+			return savingsAccountList.length;
+		} else {
+			return 0;
+		}
+	}
+	//19. double getSavingsBalance()
+	public double getSavingsBalance() {
+		double totalBalance = 0.0;
+		if (savingsAccountList != null) {
+			for (int i = 0 ; i < savingsAccountList.length ; i++) {
+				totalBalance += savingsAccountList[i].getBalance();
+			}
+		}
+		return totalBalance;
+	}
+	//20. CDAccount addCDAccount(CDOffering offering, double openingBalance)
+	public void addCDAccount(CDOffering offering, double openingBalance){
+		if (offering != null && openingBalance >= 0) {
+			if (cdAccountList == null) {
+				cdAccountList = new CDAccount[1];
+				try {
+					cdAccountList[0] = new CDAccount(offering, openingBalance);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			} else {
+				CDAccount[] tempCDAccount = new CDAccount[cdAccountList.length + 1];
+				for ( int i=0; i < cdAccountList.length; i++) {
+					cdAccountList[i] = tempCDAccount[i];
+				}
+				try {
+					tempCDAccount[cdAccountList.length] = new CDAccount(offering, openingBalance);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				cdAccountList = tempCDAccount;
+			}
+		}
+	}
+	//21. CDAccount addCDAccount(CDAccount cdAccount)
+	public void addCDAccount(CDAccount cdAccount) {
+		if (cdAccountList == null) {
+			cdAccountList = new CDAccount[1];
+			cdAccountList[0] = cdAccount;
+		} else {
+			CDAccount[] tempCdAccount = new CDAccount[cdAccountList.length + 1];
+			for (int i = 0; i < cdAccountList.length; i++) {
+				tempCdAccount[i] = cdAccountList[i];
+			}
+			tempCdAccount[cdAccountList.length] = cdAccount;
+			cdAccountList = tempCdAccount;
+		}
+	}
+	//22. CDAccount[] getCDACcounts()
 	public CDAccount[] getCDAccounts() {
-		return cdAccountStorage;
-		
+		return cdAccountList;
 	}
-	
-//************************************************** PART 4 OF CD ACCOUNT  ************************************************** 
-	
-	public int getNumberOfCDAccounts() {
-		return cdAccountStorage.length;
-	}
-	
-//************************************************** PART 5 OF CD ACCOUNT  ************************************************** 
-	
-	public double getCDBalance() {
-		double total = 0;
-		for(CDAccount balance : cdAccountStorage) {
-			total = total + balance.getBalance();
+	//23. int getNumberOfCDAccounts()
+	public int getNumberofCDAccounts() {
+		if (cdAccountList != null) {
+			return cdAccountList.length;
+		} else {
+			return 0;
 		}
-		return total;
 	}
-	
-//************************************************** PART 6 OF CD ACCOUNT  ************************************************** 	
-	
-	public double getCombinedBalance() {
-		return getCDBalance() + getSavingsBalance() + getCheckingBalance();
-		
+	//24. double getCDBalance()
+	public double getCDBalance() {
+		double totalCdBalance = 0.0;
+		if (cdAccountList != null) {
+			for (int i = 0; i < cdAccountList.length; i++){
+				totalCdBalance += cdAccountList[i].getBalance();
+			}
+		}
+		return totalCdBalance;
 	}
-
+	//25. double getCombinedBalance()
+	public double getCombinedBalance(){
+		return getCheckingBalance() + getSavingsBalance() + getCDBalance();
+	}
+	@Override
+	public int compareTo(AccountHolder otherAccountHolder) {
+		if(getCombinedBalance() == otherAccountHolder.getCombinedBalance()) {
+			return 0;
+		} else if (getCombinedBalance() > otherAccountHolder.getCombinedBalance()) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+	@Override
+	public String writeToString(){
+		return myFirstName+","+myMiddleName+","+myLastName+","+mySsn;
+	}
+	public static AccountHolder readFromString(String accountHolderInfo) {
+		String[] accountinfo = accountHolderInfo.split(",");
+		AccountHolder accountHolder = new AccountHolder(accountinfo[0], accountinfo[1], accountinfo[2], accountinfo[3]);
+		return accountHolder;
+	}
 }
