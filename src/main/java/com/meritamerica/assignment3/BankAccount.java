@@ -106,7 +106,7 @@ public class BankAccount {
 
 	}
 
-public static BankAccount readFromString(String accountData) {
+public static BankAccount readFromString(String accountData) throws ParseException {
 
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
