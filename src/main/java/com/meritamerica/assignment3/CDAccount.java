@@ -12,27 +12,40 @@ import java.util.Formatter;
 
 public class CDAccount extends BankAccount {
 
-	CDOffering offering;
+	private CDOffering offering;
 	private double balance;
 	private Date date;
-	public int term;
+	public static int term;
+	
 
+
+	public CDAccount(long accountNumber, double balance, double interestRate, Date date, int term) {
+		super(accountNumber, balance, interestRate);
+	}
+	
 	public CDAccount(CDOffering offering, double balance) {
 		
 		super(MeritBank.getNextAccountNumber(), balance, offering.getInterestRate());
 		this.offering = offering;
 		this.date = new Date();
+		this.balance = balance;
 	}
 	
-	public CDAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn, int term) {
+	public CDAccount(CDOffering offering, long accountNumber, double balance, Date date) {
 		
-		super(accountNumber, balance, interestRate, accountOpenedOn);
-		this.term = term;
+		super(accountNumber, balance);
+		
+		this.offering = offering;
+		
+		//this.term = term;
+		//this.date = date;
 		
 		//this.offering.setTerm(term);
 		//this.offering.setInterestRate(interest);
 		
 	}
+	
+	
 
 	public double getBalance() {
 		return super.getBalance();
@@ -43,7 +56,7 @@ public class CDAccount extends BankAccount {
 	}
 
 	public int getTerm() {
-		return this.offering.getTerm();
+		return offering.getTerm();
 	}
 
 	public Date getStartDate() {
@@ -55,7 +68,7 @@ public class CDAccount extends BankAccount {
 	}
 
 	public double futureValue() {
-		return (balance * Math.pow(1.0 + offering.getInterestRate(), offering.getTerm()));
+		return balance * (Math.pow(1.0 + offering.getInterestRate(), offering.getTerm()));
 	}
 	
 //------------------------------------------------- ASSIGNMENT 3 AMENDMENTS -----------------------------------------------
@@ -70,31 +83,51 @@ public class CDAccount extends BankAccount {
 		return false;
 	}
 	
-	public static CDAccount readFromString(String accountData) throws ParseException, NumberFormatException{
+	
+	
+	
+	public static CDAccount readFromString(String string) {
 		
-		CDAccount newCdAccount;
-		 
+		CDAccount cd;
+		
 		try {
-			ArrayList<String> TEST = new ArrayList<>(Arrays.asList(accountData.split(",")));
+			String[] newArray = string.split(",");
 			
-			int accountNumber = Integer.parseInt(TEST.get(0));
-			double balance = Double.parseDouble(TEST.get(1));
-			double interestRate = Double.parseDouble(TEST.get(2));
-			Date accountOpenedOn = formatter.parse(TEST.get(3));
-			int term = Integer.parseInt(TEST.get(4));
-			newCdAccount = new CDAccount(accountNumber, balance, interestRate, accountOpenedOn, term);
+			long accountNumber = Long.parseLong(newArray[0]);
 			
+			double balance = Double.parseDouble(newArray[1]);
+			
+			double interestRate = Double.parseDouble(newArray[2]);
+			
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+			
+			Date date = dateFormatter.parse(newArray[3]);
+			
+			int term = Integer.parseInt(newArray[4]);
+			
+			cd = new CDAccount(accountNumber, balance, interestRate, date, term);
+			
+			for(String s: newArray) {
+				System.out.println(s);
+			}
+			
+					//CDAccount(long accountNumber, double balance, double interestRate, Date date, int term)
 		}
-		catch (ParseException e) {
-			throw new java.lang.NumberFormatException();
+	
+		catch (Exception e) {
+			System.out.println("readFromString in CDAccount" + "THIS THREW a NumberFormatException");
 			
+			throw new NumberFormatException();
 		}
-		return newCdAccount;
-		
+		System.out.println("CD GET BALANCE " + cd.getBalance());
+		return cd;
 	}
 	
+	
+	
+
 	public String writeToString() {
+		//return String 
 		return this.getAccountNumber() + " , " + this.getBalance() + " , " + this.getinterestRate() + " , " + this.getTerm();
 	}
 }
-	

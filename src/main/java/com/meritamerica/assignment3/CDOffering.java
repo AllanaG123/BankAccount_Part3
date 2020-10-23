@@ -2,11 +2,15 @@ package com.meritamerica.assignment3;
 
 public class CDOffering {
 
-	int term;
-	double interestRate;
+	private int term;
+	private double interestRate;
 	
 
 // CONSTRUCTOR
+	
+	public CDOffering() {
+		
+	}
 
 	public CDOffering (int term, double interestRate) {
 		this.term = term;
@@ -26,21 +30,17 @@ public class CDOffering {
 		return "Your CD Offering Terms: " + this.getTerm() + " Your CD Offering Interest Rate: " + this.getInterestRate();
 	}
 		
-// AMENDMENTS 
+//------------------------------- ASSIGNMENT 3 AMENDMENTS ------------------------------
 	
-	static CDOffering readFromString(String cdOfferingDataString) {
+	
+	public static CDOffering readFromString(String string) {
+		String[] newArray = string.split(",");
 		
-		String storage1[] = cdOfferingDataString.split(",");
-		int testTerm = Integer.parseInt(storage1[0]);
-		double testInterest = Double.parseDouble(storage1[1]);
+		int term = Integer.valueOf(newArray[0]);
 		
-		CDOffering offeringA = new CDOffering(testTerm, testInterest);
-		return offeringA;
-	}
-	
-	
-	public String writeToString() {
-		return this.term + "," + this.interestRate;
+		double interestRate = Double.valueOf(newArray[1]);
+		
+		return new CDOffering(term, interestRate);
 	}
 	
 }

@@ -76,7 +76,7 @@ public class SolutionTest {
     	
     	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(0);
         
-        assertEquals(true, checkingAccount.deposit(500.0));
+        assertEquals(true, checkingAccount.Deposit(500.0));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class SolutionTest {
     	
     	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(500);
         
-        assertEquals(false, checkingAccount.deposit(-500.0));
+        assertEquals(false, checkingAccount.Deposit(-500.0));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class SolutionTest {
     	
     	SavingsAccount savingsAccount = accountHolder.addSavingsAccount(0);
         
-        assertEquals(true, savingsAccount.deposit(500.0));
+        assertEquals(true, savingsAccount.Deposit(500.0));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class SolutionTest {
     	
     	SavingsAccount savingsAccount = accountHolder.addSavingsAccount(500);
         
-        assertEquals(false, savingsAccount.deposit(-500.0));
+        assertEquals(false, savingsAccount.Deposit(-500.0));
     }
 
     @Test
@@ -128,7 +128,7 @@ public class SolutionTest {
     	
     	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(50);
         
-        assertEquals(false, checkingAccount.withdraw(500.0));
+        assertEquals(false, checkingAccount.Withdraw(500.0));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class SolutionTest {
     	
     	SavingsAccount savingsAccount = accountHolder.addSavingsAccount(50);
         
-        assertEquals(false, savingsAccount.withdraw(500.0));
+        assertEquals(false, savingsAccount.Withdraw(500.0));
     }
     
     @Test
