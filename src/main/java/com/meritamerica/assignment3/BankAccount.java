@@ -1,6 +1,6 @@
 package com.meritamerica.assignment3;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.*;
 //import java.util.*;
 
@@ -15,8 +15,8 @@ public class BankAccount {
 		double bankAccount;
 		private java.util.Date accountOpenedOn;
 		
-		private double interestRate2;
-		private double balance2;
+		//private double interestRate;
+		
 		
 		static SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -25,7 +25,7 @@ public class BankAccount {
 	public BankAccount(double balance, double interestRate){
 		this.balance = balance;
 		this.interestRate = interestRate;
-		this.accountNumber = MeritBank.getNextAccountNumber();
+		this.accountNumber = getAccountNumber();
 		this.accountOpenedOn = new Date(accountNumber);
 		
 	}
@@ -35,27 +35,27 @@ public class BankAccount {
 		this.balance = balance;
 		this.interestRate = interestRate;
 		this.accountOpenedOn = d;
-		this.accountNumber = MeritBank.getNextAccountNumber();
+		this.accountNumber = getAccountNumber();
 	}
 		
 		
-	public BankAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn2) {
+	public BankAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn) {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.interestRate = interestRate;
-		this.accountOpenedOn = accountOpenedOn2;
+		this.accountOpenedOn = accountOpenedOn;
 	
 	}
 		
 // ACCOUNT NUMBER
 	
 	// METHOD ADDED TO MAKE CDACCOUNT LINE 26 WORK
-	 public BankAccount(long nextAccountNumber, double balance2, double interestRate2) {
-		 	this.balance2 = balance2;
-			this.interestRate2 = interestRate2;
+	 public BankAccount(long nextAccountNumber, double balance, double interestRate) {
+		 	this.balance = balance;
+			this.interestRate = interestRate;
 			java.util.Date d = null;
 			this.accountOpenedOn = d;
-			this.accountNumber = MeritBank.getNextAccountNumber();
+			this.accountNumber = getAccountNumber();
 	}
 
 	public long getAccountNumber() {
@@ -66,7 +66,7 @@ public class BankAccount {
 		this.accountNumber = accountNumber;
 	}
 
-// BALANACE
+// BALANCE
 	 
 	public double getBalance() {
 		return this.balance;
@@ -137,14 +137,15 @@ public class BankAccount {
 		try {
 			String storage1[] = accountData.split(",");
 			
-			int formattedAccount = Integer.parseInt(storage1[0]);
-			double formattedBalance = Double.parseDouble(storage1[1]);
-			double formattedInterest = Double.parseDouble(storage1[2]);
+			int formattedaccountNumber = Integer.parseInt(storage1[0]);
+			double formattedbalance = Double.parseDouble(storage1[1]);
+			double formattedinterestRate = Double.parseDouble(storage1[2]);
 			Date formattedDate = (Date) dateFormatter.parse(storage1[3]);
+			
 		
 			//Date formattedDate = Date.valueOf(storage1[3]);
 			
-			BankAccount formattedBank = new BankAccount(formattedAccount, formattedBalance, formattedInterest, formattedDate);
+			BankAccount formattedBank = new BankAccount(formattedaccountNumber, formattedbalance, formattedinterestRate, formattedDate);
 			
 			return formattedBank;
 		}

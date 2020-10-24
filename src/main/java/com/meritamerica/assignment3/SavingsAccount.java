@@ -14,12 +14,13 @@ public class SavingsAccount extends BankAccount {
 	private static Date date;
 	
 	
+	
 		public SavingsAccount() {
 			super(MeritBank.getNextAccountNumber(), 0, interestRate, date);
 		}
 		
 		public SavingsAccount(double openingBalance) {
-			super(MeritBank.getNextAccountNumber(), openingBalance, interestRate);
+			super(MeritBank.getNextAccountNumber(), openingBalance, interestRate,date);
 		}
 	
 		public SavingsAccount(double openingBalance, double interestRate) {
@@ -61,7 +62,7 @@ public class SavingsAccount extends BankAccount {
 	
 	public String toString() {
 		
-		return "SAVINGS ACCOUNT BALANCE" + getBalance() + "SAVINGS INTEREST RATE" + getInterestRate() + "SAVINGS ACCOUNT BALANCE IN 3 YEARS:" + futureValue(3);
+		return "SAVINGS ACCOUNT BALANCE" + getBalance() + "SAVINGS INTEREST RATE" + getInterestRate() + "SAVINGS ACCOUNT NUMBER " + getAccountNumber() + "SAVINGS ACCOUNT BALANCE IN 3 YEARS:" + futureValue(3);
 		
 	}
 
