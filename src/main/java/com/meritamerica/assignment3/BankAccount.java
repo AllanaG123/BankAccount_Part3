@@ -25,8 +25,8 @@ public class BankAccount {
 	public BankAccount(double balance, double interestRate){
 		this.balance = balance;
 		this.interestRate = interestRate;
-		this.accountNumber = getAccountNumber();
-		this.accountOpenedOn = new Date(accountNumber);
+		//this.accountNumber = getAccountNumber();
+	//	this.accountOpenedOn = new Date(accountNumber);
 		
 	}
 		
@@ -35,7 +35,7 @@ public class BankAccount {
 		this.balance = balance;
 		this.interestRate = interestRate;
 		this.accountOpenedOn = d;
-		this.accountNumber = getAccountNumber();
+		//this.accountNumber = getAccountNumber();
 	}
 		
 		
@@ -50,12 +50,12 @@ public class BankAccount {
 // ACCOUNT NUMBER
 	
 	// METHOD ADDED TO MAKE CDACCOUNT LINE 26 WORK
-	 public BankAccount(long nextAccountNumber, double balance, double interestRate) {
+	 public BankAccount(long getAccountNumber, double balance, double interestRate) {
 		 	this.balance = balance;
 			this.interestRate = interestRate;
 			java.util.Date d = null;
 			this.accountOpenedOn = d;
-			this.accountNumber = getAccountNumber();
+			this.accountNumber = getAccountNumber;
 	}
 
 	public long getAccountNumber() {
@@ -130,7 +130,7 @@ public class BankAccount {
 // AMMENDMENTS
 
 
-	static BankAccount readFromString(String accountData) throws ParseException {
+	static BankAccount readFromString(String accountData,Date d) throws ParseException {
 		
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 		

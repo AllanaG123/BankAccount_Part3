@@ -31,9 +31,9 @@ public class CDAccount extends BankAccount {
 		this.balance = balance;
 	}
 	
-	public CDAccount(CDOffering offering, long accountNumber, double balance, Date date) {
+	public CDAccount(CDOffering offering, long getAccountNumber, double balance, Date date) {
 		
-		super(accountNumber, balance);
+		super(getAccountNumber, balance);
 		
 		this.offering = offering;
 		
@@ -90,6 +90,7 @@ public class CDAccount extends BankAccount {
 		
 		CDAccount cd;
 		
+		
 		try {
 			String[] newArray = string.split(",");
 			
@@ -101,7 +102,7 @@ public class CDAccount extends BankAccount {
 			
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 			
-			Date date = dateFormatter.parse(newArray[3]);
+			Date date =  dateFormatter.parse(newArray[3]);
 			
 			int term = Integer.parseInt(newArray[4]);
 			
@@ -116,7 +117,7 @@ public class CDAccount extends BankAccount {
 	
 		catch (Exception e) {
 			System.out.println("readFromString in CDAccount" + "THIS THREW a NumberFormatException");
-			
+
 			throw new NumberFormatException();
 		}
 		System.out.println("CD GET BALANCE " + cd.getBalance());
