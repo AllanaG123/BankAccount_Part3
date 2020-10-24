@@ -37,12 +37,6 @@ public class CDAccount extends BankAccount {
 		
 		this.offering = offering;
 		
-		//this.term = term;
-		//this.date = date;
-		
-		//this.offering.setTerm(term);
-		//this.offering.setInterestRate(interest);
-		
 	}
 	
 	
